@@ -15,7 +15,7 @@ This tool is command-line based.
 Using go get:
 
 ```
-go get github.com/jbenet/ipfs-senc
+go get github.com/jbenet/ipfs-senc/ipfs-senc
 ```
 
 ### How to encrypt & share
