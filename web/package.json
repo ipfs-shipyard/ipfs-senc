@@ -1,0 +1,29 @@
+{
+  "name": "senc-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dev-null": "^0.1.1",
+    "from2": "^2.3.0",
+    "gunzip-maybe": "^1.4.1",
+    "multibase": "^0.4.0",
+    "prettier-bytes": "^1.0.4",
+    "request": "^2.87.0",
+    "senc": "^2.0.0",
+    "tar-stream": "^1.6.1",
+    "through2": "^2.0.3",
+    "yo-fs": "^3.0.3",
+    "yo-yo": "^1.4.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "live-server": "^1.2.0",
+    "watch": "^1.0.2"
+  }
+}

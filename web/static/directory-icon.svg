@@ -1,0 +1,19 @@
+<?xml version="1.0"?><svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+ <title>Medium Blue Folder</title>
+ <g>
+  <title>Layer 1</title>
+  <rect id="svg_6" stroke-linecap="round" stroke-linejoin="bevel" height="13.000001" width="74.99999" y="107.999999" x="129.500015" stroke-width="99" stroke="#aad4ff" fill="#aad4ff"/>
+  <rect id="svg_4" stroke-linecap="round" stroke-linejoin="round" height="167.000007" width="96.999983" y="78" x="92.000015" stroke-width="50" stroke="#aad4ff" fill="#aad4ff"/>
+  <rect id="svg_3" stroke-linecap="round" stroke-linejoin="round" height="155.000007" width="449.999966" y="107" x="93.000015" stroke-width="50" stroke="#aad4ff" fill="#aad4ff"/>
+  <rect stroke-linecap="round" stroke-linejoin="round" id="svg_1" height="174.000002" width="449.999966" y="125" x="92.000015" stroke-width="50" stroke="#56aaff" fill="#56aaff"/>
+  <rect id="svg_5" stroke-linecap="round" height="100.000002" width="449.999966" y="280.999998" x="92.000012" stroke-width="50" stroke="#56aaff" fill="#56aaff"/>
+  <rect id="svg_7" stroke-linecap="round" height="8.000001" width="497.899895" y="382.666667" x="67.000017" stroke-width="0" stroke="#56aaff" fill="url(#svg_9)"/>
+  <rect id="svg_11" stroke-linecap="round" height="8.000001" width="498.299859" y="394.4" x="67.000016" stroke-width="0" stroke="#56aaff" fill="url(#svg_9)"/>
+ </g>
+ <defs>
+  <linearGradient y2="0.4" x2="0.5" y1="0" x1="0.5" id="svg_9">
+   <stop stop-color="#007fff" offset="0"/>
+   <stop stop-color="#56aaff" offset="1"/>
+  </linearGradient>
+ </defs>
+</svg>
