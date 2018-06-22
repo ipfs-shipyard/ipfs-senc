@@ -22,6 +22,9 @@ https://ipfs.io/ipfs/QmSHWKevbs3wS5yUitjbtJGQ2oacdVWkeUreMvVB9gAfQc/#z7ctM2TbRQJ
 
 ### Step 1. Encrypt and share the files with `ipfs-senc`
 ```
+# pick a folder to share (here, it is test-senc)
+> mkdir test-senc
+> # add files.
 > ipfs-senc --random-key share test-senc
 Initializing ipfs node...
 Sharing test-senc ...
