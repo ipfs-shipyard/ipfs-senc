@@ -176,6 +176,7 @@ func cmdShare(args []string) error {
   fmt.Println("Ciphertext on global gateway: ", l)
   fmt.Println("Get, Decrypt, and Unbundle with:")
   fmt.Println("    ipfs-senc --key", keyStr, "download", l, "dstPath")
+  fmt.Printf("Web slug: #%s:%s\n", keyStr, l)
   return nil
 }
 

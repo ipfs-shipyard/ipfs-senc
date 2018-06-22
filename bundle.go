@@ -7,7 +7,6 @@ import (
   "strings"
   "path/filepath"
   "archive/tar"
-  "compress/gzip"
 )
 
 
@@ -40,10 +39,10 @@ func TarAndZip(src string, writers ...io.Writer) error {
 
   mw := io.MultiWriter(writers...)
 
-  gzw := gzip.NewWriter(mw)
-  defer gzw.Close()
+  // gzw := gzip.NewWriter(mw)
+  // defer gzw.Close()
 
-  tw := tar.NewWriter(gzw)
+  tw := tar.NewWriter(mw)
   defer tw.Close()
 
   // walk path
@@ -95,13 +94,13 @@ func TarAndZip(src string, writers ...io.Writer) error {
 // creating the file structure at 'dst' along the way, and writing any files
 func UnzipAndUntar(dst string, r io.Reader) error {
 
-  gzr, err := gzip.NewReader(r)
-  defer gzr.Close()
-  if err != nil {
-    return err
-  }
+  // gzr, err := gzip.NewReader(r)
+  // defer gzr.Close()
+  // if err != nil {
+  //   return err
+  // }
 
-  tr := tar.NewReader(gzr)
+  tr := tar.NewReader(r)
 
   for {
     header, err := tr.Next()
