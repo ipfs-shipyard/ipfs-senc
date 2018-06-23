@@ -18,12 +18,16 @@ var (
   API string
   RandomKey bool
   DirWrap bool
-  // SkipOsFiles bool
 )
 
 // errors
 var (
   ErrNoIPFS = errors.New("ipfs node error: not online")
+)
+
+const (
+  gwayGlobal = "https://gateway.ipfs.io"
+  gwayLocal = "http://localhost:8080"
 )
 
 var Usage = `ENCRYPT AND SEND
@@ -121,13 +125,13 @@ func cmdDownload(args []string) error {
     return err
   }
 
-  fmt.Println("Initializing ipfs node...")
+  // fmt.Println("Initializing ipfs node...")
   n := ipfssenc.GetROIPFSNode(API)
   if !n.IsUp() {
     return ErrNoIPFS
   }
 
-  fmt.Println("Getting", srcLink, "...")
+  // fmt.Println("Getting", srcLink, "...")
   err = ipfssenc.GetDecryptAndUnbundle(n, srcLink, dstPath, key)
   if err != nil {
     return err
@@ -151,7 +155,7 @@ func cmdShare(args []string) error {
     return err
   }
 
-  fmt.Println("Initializing ipfs node...")
+  // fmt.Println("Initializing ipfs node...")
   n, err := ipfssenc.GetRWIPFSNode(API)
   if err != nil {
     return err
@@ -160,7 +164,7 @@ func cmdShare(args []string) error {
     return ErrNoIPFS
   }
 
-  fmt.Println("Sharing", srcPath, "...")
+  // fmt.Println("Sharing", srcPath, "...")
   link, err := ipfssenc.BundleEncryptAndPut(n, srcPath, key, DirWrap)
   if err != nil {
     return err
@@ -177,11 +181,14 @@ func cmdShare(args []string) error {
   }
 
   fmt.Println("Shared as: ", l)
-  fmt.Println("Ciphertext on local gateway: ", l)
-  fmt.Println("Ciphertext on global gateway: ", l)
+  fmt.Println("Key: ", keyStr)
+  fmt.Println("Ciphertext on local gateway: ", gwayGlobal, l)
+  fmt.Println("Ciphertext on global gateway: ", gwayLocal, l)
+  fmt.Println("")
   fmt.Println("Get, Decrypt, and Unbundle with:")
   fmt.Println("    ipfs-senc --key", keyStr, "download", l, "dstPath")
-  fmt.Printf("Web slug: #%s:%s\n", keyStr, l)
+  fmt.Println("")
+  fmt.Printf("View on the web: https://ipfs.io/ipns/ipfs-senc.net/#%s:%s\n", keyStr, l)
   return nil
 }
 
