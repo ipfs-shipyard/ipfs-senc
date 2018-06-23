@@ -11,6 +11,7 @@
   "dependencies": {
     "dev-null": "^0.1.1",
     "dnslink-deploy": "^1.0.7",
+    "eventemitter3": "^3.1.0",
     "from2": "^2.3.0",
     "gunzip-maybe": "^1.4.1",
     "jquery": "^3.3.1",

@@ -13,22 +13,18 @@ body {
   overflow: none;
 }
 
-body.mouse-moving {
-  /*background-color: rgba(0, 0, 0, 0.2);*/
-}
-
 div {
   margin: 0px;
   padding: 0px;
 }
 
-#container {
+#senc-container {
   display: flex;
   flex-flow: column;
   height: 100%;
 }
 
-#container #form {
+#senc-container #form {
   flex: 0 1 auto;
 }
 
@@ -54,7 +50,7 @@ div {
   height: 30px;
 }
 
-#container #browser {
+#senc-container #browser {
   flex: 1 1 auto;
   position: relative;
   width: 100%;
@@ -182,7 +178,7 @@ table#file-widget {
   display: none;
 }
 
-body.mouse-moving #fc-buttons button {
+#senc-container.mouse-moving #fc-buttons button {
   display: block;
 }
 
