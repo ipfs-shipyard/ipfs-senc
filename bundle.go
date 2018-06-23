@@ -53,6 +53,10 @@ func TarAndZip(src string, writers ...io.Writer) error {
       return err
     }
 
+    if fi.IsDir() && fi.Name() == ".DS_Store" {
+      return filepath.SkipDir
+    }
+
     // create a new dir/file header
     header, err := tar.FileInfoHeader(fi, fi.Name())
     if err != nil {
