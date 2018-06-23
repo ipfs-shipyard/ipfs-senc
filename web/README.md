@@ -43,25 +43,26 @@ https://ipfs.io                             - ipfs gateway to use
 # pick a folder to share (here, it is test-senc)
 > mkdir test-senc
 > # add files.
-> ipfs-senc --random-key share test-senc
-Initializing ipfs node...
-Sharing test-senc ...
-Shared as:  /ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
-Ciphertext on local gateway:  http://localhost:8080/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
-Ciphertext on global gateway:  https://ipfs.io/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
+> ipfs-senc share senc-demo-full
+skipping top level dir
+Shared as:  /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
+Key:  zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR
+Ciphertext on local gateway:  https://gateway.ipfs.io /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
+Ciphertext on global gateway:  http://localhost:8080 /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
+
 Get, Decrypt, and Unbundle with:
-    ipfs-senc --key z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP download /ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC dstPath
-Web slug: #z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP:/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
-# this outputs a key to use
+    ipfs-senc --key zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR download /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo dstPath
+
+View on the web: https://ipfs.io/ipns/ipfs-senc.net/#zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
 ```
 
 This yielded:
-- `key: z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP`
-- `(ciphertext) path: /ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC`
-- `web slug (combination): #z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP:/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC`
+- `key: zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR`
+- `(ciphertext) path: /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo`
+- `web slug (combination): #zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo`
 
 ### 2. View the files using the `key` and `path`
 
-- Browse https://ipfs.io/ipfs/QmSHWKevbs3wS5yUitjbtJGQ2oacdVWkeUreMvVB9gAfQc/
+- Browse https://ipfs.io/ipns/ipfs-senc
 - Use the `key` and `path` from above in the fields
 - Or copy-paste the web slug into the URL.

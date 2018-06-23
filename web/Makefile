@@ -16,7 +16,7 @@ serve: build
 	node_modules/.bin/live-server --port=7654 build
 
 watch:
-	node_modules/.bin/watch -p '/build|node_modules|test/' 'make build' .
+	node_modules/.bin/watch -p '/build|node_modules|test|.git/' 'make build' .
 
 publish-to-ipfs: build
 	@export hash=$(shell ipfs add -Q -r build) && \
