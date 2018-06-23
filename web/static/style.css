@@ -66,8 +66,25 @@ body {
   width: 100%;
 }
 
+table#file-widget {
+  border-spacing: 0px;
+}
+
+#file-widget tr:nth-child(odd) {
+  background-color: #eff8f8;
+}
+
+#file-widget tr[userselected] {
+  background-color: #13aec4;
+}
+
+#file-widget tr.entry-breadcrumb {
+  background-color: #e3e3e3;
+}
+
 #file-widget td {
-  padding: 2px 10px;
+  margin: 0px;
+  padding: 4px 12px;
 }
 
 #file-widget tr td.name {
@@ -98,6 +115,15 @@ body {
   display: none;
 }
 
+/*#browser #display {
+  background-image: url("./back-icon.svg");
+  background-position: 20px 20px;
+  background-size: 150px 150px;
+  background-repeat: no-repeat;
+  background: -webkit-linear-gradient(transparent, #FFF) left repeat;
+  background: linear-gradient(transparent, #FFF) left repeat;
+}
+*/
 #browser #display video,
 #browser #display img {
   object-fit: contain;

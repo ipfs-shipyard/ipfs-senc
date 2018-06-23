@@ -7,8 +7,8 @@ const tar2yofs = require('./tar2yofs')
 const concat = require('concat-stream')
 const through2 = require('through2')
 const pretty = require('prettier-bytes')
+const $ = require('jquery')
 
-const $ = document.querySelector.bind(document)
 
 // app will have all the variables.
 // gets populated as we go.
@@ -37,19 +37,18 @@ var cat = (path) => request(app.ipfsGateway + path)
 
 function main() {
   app.$submit = $('#input-submit')
-  app.$submit = $('#input-submit')
   app.$path = $('#input-path')
   app.$key = $('#input-key')
   app.$browser = $('#browser')
   app.$counter = $('#counter')
   app.$loading = $('#loading-spinner')
 
-  app.$submit.onclick = onClickLoad
-  app.$submit.disabled = false
+  app.$submit.click(onClickLoad)
+  app.$submit.attr('disabled', false)
 
   // if path is seeded, process it.
   populateFromHash()
-  if (app.$path.value != '') onClickLoad()
+  if (app.$path.val() != '') onClickLoad()
   else setLoading(false) // else stop loading.
 }
 
@@ -67,8 +66,8 @@ function cleanPath(path) {
 
 function onClickLoad() {
   setLoading(true)
-  var path = cleanPath(app.$path.value)
-  var key = app.$key.value
+  var path = cleanPath(app.$path.val())
+  var key = app.$key.val()
 
   var s = loadAndDecrypt(path, key)
   renderTree(s, app.$browser)
@@ -88,28 +87,33 @@ function loadAndDecrypt(path, key) {
   return s
 }
 
-function renderTree(bundle, el) {
-  var onclick = () => {}
+function renderTree(bundle, $el) {
+  var onclick = (e) => {
+    // this clicks the td. select the tr
+    select($(e.target).closest('tr'))
+  }
   var yf = yofs('/', [], onclick)
-  clearElem(el)
-  el.appendChild(yf.widget)
+  $el.children().remove()
+  $el.append(yf.widget)
 
   var c = tar2yofs((err, files) => {
     if (err) throw err
     var entries = Object.values(files)
     yf.update(yf.render('/', entries, onclick))
     setLoading(false)
+    autoSelectFirstFile()
   })
 
   bundle.pipe(counterStream()).pipe(c)
   // bundle.pipe(counterStream()) .on('data', (d) => { console.log(d.length) })
 }
 
+function autoSelectFirstFile() {
+  $('.entry.file:first').click()
+}
+
 function setLoading(toggle) {
-  if (toggle)
-    app.$loading.className = 'loading-spinner'
-  else
-    app.$loading.className = ''
+  app.$loading.toggleClass('loading-spinner', toggle)
 }
 
 function populateFromHash() {
@@ -117,28 +121,30 @@ function populateFromHash() {
   if (!h) return
 
   vals = h.split(':')
-  app.$key.value = vals[0]
-  app.$path.value = vals[1]
+  app.$key.val(vals[0])
+  app.$path.val(vals[1])
 }
 
 function populateToHash(path, key) {
   window.location.hash = key +':'+ path
 }
 
-function clearElem(el) {
-  while (el.hasChildNodes()) {
-    el.removeChild(el.lastChild)
-  }
-}
-
 function counterStream() {
   var size = 0
   return through2(function (chunk, enc, cb) {
     size += chunk.length
-    app.$counter.innerText = pretty(size)
+    app.$counter.text(pretty(size))
     this.push(chunk)
     cb()
   })
+}
+
+function select(el, keepLast) {
+  if (!keepLast) {
+     // clear all prior selections
+    $('[userselected]').removeAttr('userselected')
+  }
+  $(el).attr('userselected', 'true')
 }
 
 window.onload = main
