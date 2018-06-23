@@ -6,6 +6,15 @@ Currently, IPFS does not have an inbuilt content encryption system. Many solutio
 
 > WARNING: i cannot maintain small pieces of software anymore. if you want to use this, pull it into ipfs-shipyard (i'm happy to transfer it) and maintain it there. I just put it under @jbenet for simplicity.
 
+## View examples on the web
+
+- Full Demo: https://ipfs.io/ipns/ipfs-senc.net/#zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
+- Small Demo: https://ipfs.io/ipns/ipfs-senc.net/#z5xBkE3by6qydJRKq3qG7miwBAo4VKnVUemUN2NkdWPGz:/ipfs/QmawKztbUe4DuYdKuCX3JMqDakhAcqas5zxwRRNxSZbEgf
+- Secret Sintel: https://ipfs.io/ipns/ipfs-senc.net/#z8C6ojoe8MXsnHBo7R3JkpbfHQfiNHvssPpMSrf8LUUmh:/ipfs/QmShBDVU7aMP517Zg4F85pPpmXZKvxpcGpaPeu9ADeoYRe
+
+
+[See the viewer webapp docs here](./web)
+
 ## On the commandline
 
 This tool is command-line based.
@@ -25,7 +34,7 @@ go get github.com/jbenet/ipfs-senc/ipfs-senc
 ipfs-senc share --key <secret-key> <path-to-file-or-directory>
 
 # encrypt with a randomly generated key. will be printed out.
-ipfs-senc share --random-key <path-to-file-or-directory>
+ipfs-senc share <path-to-file-or-directory>
 ```
 
 Leave your IPFS node running, or pin this somewhere. consider [ipfs-cluster](https://github.com/ipfs/ipfs-cluster).
@@ -48,7 +57,7 @@ If you have [the `senc` tool](https://github.com/jbenet/go-simple-encrypt/senc),
 
 ## On the browser
 
-This can work entirely on the browser. PRs accepted for a single-page webapp that decrypts these on the browser and lets people download them. Bonus points for showing the filesystem (dirs and files) on the browser before the user downloads anything to their desktop.
+This can work entirely on the browser. The viewer code [is included in this repo](./web). It needs to learn how to add files too. ([drag-it, drop-it, crypt-it, pin-it, share-it, click-it, load-it, de-crypt, view-it](https://www.youtube.com/watch?v=D8K90hX4PrE)).
 
 ## License
 

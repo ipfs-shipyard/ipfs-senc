@@ -11,12 +11,30 @@ This is a tool to view `ipfs-senc` shared files on the web.
 - Decrypts right in the browser
 - Works out of any ipfs gateway
 
-## Example
+## Examples
 
-- Check out this live example:
-https://ipfs.io/ipfs/QmSHWKevbs3wS5yUitjbtJGQ2oacdVWkeUreMvVB9gAfQc/#z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP:/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
-- Corresponding ciphertext: https://ipfs.io/ipfs/QmT4gwMTHhMhiNCAfWk591hc8WX3vvTFJHdgGV2TDnijXC
-- Corresponding key: `z7ctM2TbRQJ7soyjtU7qZgCmf9qmd1RsNdrYak5Tot7jP`
+- Full Demo: https://ipfs.io/ipns/ipfs-senc.net/#zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
+- Small Demo: https://ipfs.io/ipns/ipfs-senc.net/#z5xBkE3by6qydJRKq3qG7miwBAo4VKnVUemUN2NkdWPGz:/ipfs/QmawKztbUe4DuYdKuCX3JMqDakhAcqas5zxwRRNxSZbEgf
+- Secret Sintel: https://ipfs.io/ipns/ipfs-senc.net/#z8C6ojoe8MXsnHBo7R3JkpbfHQfiNHvssPpMSrf8LUUmh:/ipfs/QmShBDVU7aMP517Zg4F85pPpmXZKvxpcGpaPeu9ADeoYRe
+
+### Anatomy of the URL
+
+A URL like https://ipfs.io/ipns/ipfs-senc.net/#zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo is broken down into:
+
+```
+(gateway-url)(webapp-path)#(key):(ciphertext-path)
+```
+
+For example
+
+```
+https://ipfs.io                             - ipfs gateway to use
+  /ipns/ipfs-senc.net                       - tag for the latest webapp release
+  #                                         - anchor tag: dont send the rest to servers (keys!)
+    zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR         - symmetric encryption key (read cap)
+    :                                                     - separator
+    /ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo  - ipfs path to ciphertext
+```
 
 ## Usage
 
