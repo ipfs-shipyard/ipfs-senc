@@ -8,6 +8,7 @@ const concat = require('concat-stream')
 const through2 = require('through2')
 const pretty = require('prettier-bytes')
 const $ = require('jquery')
+const filedl = require('js-file-download')
 
 
 // app will have all the variables.
@@ -36,6 +37,10 @@ var cat = (path) => request(app.ipfsGateway + path)
 // var cat = (path) => ipfs.files.catReadableStream(path)
 
 function main() {
+  // init stuff.
+  listenForMouseMoving($('body'))
+  registerFileControlHandlers()
+
   app.$submit = $('#input-submit')
   app.$path = $('#input-path')
   app.$key = $('#input-key')
@@ -88,13 +93,19 @@ function loadAndDecrypt(path, key) {
 }
 
 function renderTree(bundle, $el) {
-  var onclick = (e) => {
+  var onclick = (e, entry) => {
     // this clicks the td. select the tr
-    select($(e.target).closest('tr'))
+    userselectEl($(e.target).closest('tr'))
   }
-  var yf = yofs('/', [], onclick)
-  $el.children().remove()
+  var yf = app.yf = yofs('/', [], onclick)
+  $(yf.widget).remove()
   $el.append(yf.widget)
+
+  // set this handler to switch the mode and trigger re-click
+  yf.setMode = (mode) => {
+    yf.srcMode = (mode == 'src')
+    userselectedEl().click()
+  }
 
   var c = tar2yofs((err, files) => {
     if (err) throw err
@@ -139,12 +150,80 @@ function counterStream() {
   })
 }
 
-function select(el, keepLast) {
+function userselectEl(el, keepLast) {
   if (!keepLast) {
      // clear all prior selections
     $('[userselected]').removeAttr('userselected')
   }
   $(el).attr('userselected', 'true')
+}
+
+function userselectedEl() {
+  return $('[userselected]')
+}
+
+function listenForMouseMoving($el) {
+  var moving = false
+  var timeout = null
+
+  function started() {
+    $el.addClass('mouse-moving')
+  }
+
+  function moved() {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(ended, 500)
+  }
+
+  function ended() {
+    $el.removeClass('mouse-moving')
+    moving = false
+    timeout = null
+  }
+
+  $el.mousemove((e) => {
+    if (!moving) {
+      moving = true
+      started()
+    }
+    moved()
+  })
+}
+
+function registerFileControlHandlers() {
+  console.log('registered file control handlers')
+  var $rdrB = $('button#fc-render')
+  var $srcB = $('button#fc-source')
+  var $dlB = $('button#fc-download')
+  var selectedCls = 'selected'
+
+  $rdrB.addClass(selectedCls) // start off selected
+  $rdrB.click(() => {
+    console.log('clicked render')
+    $rdrB.addClass(selectedCls)
+    $srcB.removeClass(selectedCls)
+    app.yf.setMode('render')
+  })
+
+  $srcB.click(() => {
+    console.log('clicked source')
+    $srcB.addClass(selectedCls)
+    $rdrB.removeClass(selectedCls)
+    app.yf.setMode('src')
+  })
+
+  $dlB.click(() => {
+    // f.contents is set by tar2yofs
+    var f = app.yf.selected
+    if (!f || !f.contents) {
+      console.error('clicked download with no file selected')
+      return false
+    }
+
+    basename = f.name.split('/').pop()
+    filedl(f.contents, basename)
+  })
+
 }
 
 window.onload = main

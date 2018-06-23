@@ -10,16 +10,18 @@
   "license": "MIT",
   "dependencies": {
     "dev-null": "^0.1.1",
+    "dnslink-deploy": "^1.0.7",
     "from2": "^2.3.0",
     "gunzip-maybe": "^1.4.1",
     "jquery": "^3.3.1",
+    "js-file-download": "^0.4.1",
     "multibase": "^0.4.0",
     "prettier-bytes": "^1.0.4",
     "request": "^2.87.0",
     "senc": "^2.0.0",
     "tar-stream": "^1.6.1",
     "through2": "^2.0.3",
-    "yo-fs": "git://github.com/jbenet/yo-fs.git#4271bc160d638a061844d4ed90b99918cf679270",
+    "yo-fs": "git://github.com/jbenet/yo-fs.git#fe12467793d397cb34a6195fa98501d990e2b5ab",
     "yo-yo": "^1.4.1"
   },
   "devDependencies": {
