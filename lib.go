@@ -79,8 +79,8 @@ func Get(n *ipfs.Shell, link IPFSLink) (io.ReadCloser, error) {
 }
 
 
-func BundleEncryptAndPut(n *ipfs.Shell, localPath string, secret Key) (IPFSLink, error) {
-  b, err := Bundle(localPath)
+func BundleEncryptAndPut(n *ipfs.Shell, localPath string, secret Key, wrapDir bool) (IPFSLink, error) {
+  b, err := Bundle(localPath, wrapDir)
   if err != nil {
     return IPFSLink(""), err
   }

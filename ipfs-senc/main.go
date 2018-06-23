@@ -17,6 +17,8 @@ var (
   Key string
   API string
   RandomKey bool
+  DirWrap bool
+  // SkipOsFiles bool
 )
 
 // errors
@@ -47,6 +49,7 @@ OPTIONS
     --random-key             generate a random key to use
     --key <secret-key>       a 256bit secret key, encoded with multibase
     --api <ipfs-api-url>     an ipfs node api to use (overrides defaults)
+    -w, --wrap               if adding a directory, wrap it first to preserve dir
 
 EXAMPLES
     > ipfs-senc share my_secret_dir
@@ -57,6 +60,8 @@ func init() {
   flag.BoolVar(&RandomKey, "random-key", false, "use a randomly generated key")
   flag.StringVar(&Key, "key", "", "an AES encryption key in hex")
   flag.StringVar(&API, "api", "", "override IPFS node API")
+  flag.BoolVar(&DirWrap, "w", false, "if adding a directory, wrap it first to preserve dir")
+  flag.BoolVar(&DirWrap, "wrap", false, "if adding a directory, wrap it first to preserve dir")
   flag.Usage = func() {
     fmt.Fprintf(os.Stderr, Usage)
   }
@@ -156,7 +161,7 @@ func cmdShare(args []string) error {
   }
 
   fmt.Println("Sharing", srcPath, "...")
-  link, err := ipfssenc.BundleEncryptAndPut(n, srcPath, key)
+  link, err := ipfssenc.BundleEncryptAndPut(n, srcPath, key, DirWrap)
   if err != nil {
     return err
   }

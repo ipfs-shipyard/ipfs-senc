@@ -11,10 +11,10 @@ import (
 
 
 // Bundle groups all the contents of a given localPath into a TarBall
-func Bundle(localPath string) (bundle io.Reader, err error) {
+func Bundle(localPath string, wrapDir bool) (bundle io.Reader, err error) {
   r, w := io.Pipe()
   go func() {
-    err := TarAndZip(localPath, w)
+    err := TarAndZip(localPath, wrapDir, w)
     w.CloseWithError(err)
   }()
   return r, nil
@@ -30,7 +30,7 @@ func Unbundle(bundle io.Reader, localPath string) error {
 // TarAndZip takes a source and variable writers and walks 'source' writing each file
 // found to the tar writer; the purpose for accepting multiple writers is to allow
 // for multiple outputs (for example a file, or md5 hash)
-func TarAndZip(src string, writers ...io.Writer) error {
+func TarAndZip(src string, wrapDir bool, writers ...io.Writer) error {
 
   // ensure the src actually exists before trying to tar it
   if _, err := os.Stat(src); err != nil {
@@ -44,6 +44,13 @@ func TarAndZip(src string, writers ...io.Writer) error {
 
   tw := tar.NewWriter(mw)
   defer tw.Close()
+
+  srcIsDir := false
+  if fi, err := os.Stat(src); err != nil {
+    return err
+  } else {
+    srcIsDir = fi.IsDir()
+  }
 
   // walk path
   return filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
@@ -65,6 +72,16 @@ func TarAndZip(src string, writers ...io.Writer) error {
 
     // update the name to correctly reflect the desired destination when untaring
     trimPath := filepath.Dir(src)
+    if !wrapDir && srcIsDir {
+      // if not wrapping, remove top level dir
+      trimPath = src
+
+      // and, if this is the root dir to skip, skip it.
+      if src == file {
+        fmt.Println("skipping top level dir")
+        return nil
+      }
+    }
     relPath := strings.TrimPrefix(file, trimPath)
     header.Name = strings.TrimPrefix(relPath, string(filepath.Separator))
 
