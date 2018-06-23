@@ -2,7 +2,7 @@
 
 set -e
 
-localAPI=http://localhost:4001
+localAPI=http://localhost:5001
 localGWY=http://localhost:8080
 globalGWY=https://ipfs.io
 
