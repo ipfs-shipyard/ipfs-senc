@@ -50,8 +50,7 @@ GET AND DECRYPT
 
 OPTIONS
     --h, --help              show usage
-    --random-key             generate a random key to use
-    --key <secret-key>       a 256bit secret key, encoded with multibase
+    --key <secret-key>       a 256bit secret key, encoded with multibase (no key = random key)
     --api <ipfs-api-url>     an ipfs node api to use (overrides defaults)
     -w, --wrap               if adding a directory, wrap it first to preserve dir
 
@@ -61,7 +60,7 @@ EXAMPLES
 `
 
 func init() {
-  flag.BoolVar(&RandomKey, "random-key", false, "use a randomly generated key")
+  flag.BoolVar(&RandomKey, "random-key", false, "use a randomly generated key (deprecated opt)")
   flag.StringVar(&Key, "key", "", "an AES encryption key in hex")
   flag.StringVar(&API, "api", "", "override IPFS node API")
   flag.BoolVar(&DirWrap, "w", false, "if adding a directory, wrap it first to preserve dir")
@@ -82,17 +81,17 @@ func decodeKey(k string) ([]byte, error) {
   return b, nil
 }
 
-func getSencKey() (ipfssenc.Key, error) {
+func getSencKey(randomIfNone bool) (ipfssenc.Key, error) {
   NilKey := ipfssenc.Key(nil)
 
   var k []byte
   var err error
   if Key != "" {
     k, err = decodeKey(Key)
-  } else if RandomKey {
+  } else if randomIfNone { // random key
     k, err = senc.RandomKey()
   } else {
-    err = errors.New("Please enter a key with --key or use --random-key")
+    err = errors.New("Please enter a key with --key")
   }
   if err != nil {
     return NilKey, err
@@ -120,7 +119,7 @@ func cmdDownload(args []string) error {
   }
 
   // check for Key, get key.
-  key, err := getSencKey()
+  key, err := getSencKey(false)
   if err != nil {
     return err
   }
@@ -150,7 +149,7 @@ func cmdShare(args []string) error {
   }
 
   // check for Key, get key.
-  key, err := getSencKey()
+  key, err := getSencKey(true)
   if err != nil {
     return err
   }
