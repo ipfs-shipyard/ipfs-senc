@@ -63,6 +63,6 @@ This yielded:
 
 ### 2. View the files using the `key` and `path`
 
-- Browse https://ipfs.io/ipns/ipfs-senc
+- Browse https://ipfs.io/ipns/ipfs-senc.net
 - Use the `key` and `path` from above in the fields
 - Or copy-paste the web slug into the URL.
