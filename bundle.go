@@ -162,6 +162,11 @@ func UnzipAndUntar(dst string, r io.Reader) error {
 
     // if it's a file create it
     case tar.TypeReg:
+      // create dirs below if non existing
+      if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
+        return err
+      }
+
       f, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR, os.FileMode(header.Mode))
       if err != nil {
         return err
