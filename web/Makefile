@@ -22,7 +22,7 @@ serve: build
 	node_modules/.bin/live-server --port=7654 build
 
 watch:
-	node_modules/.bin/watch -p '/build|node_modules|test|.git|bin/' 'make build' .
+	node_modules/.bin/watch -p '/(build|node_modules|test|.git|bin)/' 'make build' .
 
 publish-to-ipfs: build
 	bin/publish-to-ipfs
