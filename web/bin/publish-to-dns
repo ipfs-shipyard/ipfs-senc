@@ -29,15 +29,13 @@ if [[ "$oldVersion" = "$version" ]]; then
 else
   dnslink-dnsimple -t "$(cat .dnstoken)" -d "$domain" -r "$name" -l "$version" --ttl "$ttl"
 
+  echo "waiting ${ttl}s for record to expire..."
+  sleep "$ttl" # wait until last record expires (hopefully it was the same ttl)
+  sleep 5 # five seconds more just in case.
 
-fi
-
-echo "waiting ${ttl}s for record to expire..."
-sleep "$ttl" # wait until last record expires (hopefully it was the same ttl)
-sleep 5 # five seconds more just in case.
-
-currVersion=$(ipfs dns "$domain")
-echo "updated dnslink: $currVersion"
-if [[ "$currVersion" != "$version" ]]; then
-  die "the record has not updated yet"
+  currVersion=$(ipfs dns "$domain")
+  echo "updated dnslink: $currVersion"
+  if [[ "$currVersion" != "$version" ]]; then
+    die "the record has not updated yet"
+  fi
 fi
