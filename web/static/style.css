@@ -175,15 +175,16 @@ table#file-widget {
 
 #fc-buttons button {
   width: 130px;
-  display: none;
-}
-
-#senc-container.mouse-moving #fc-buttons button {
   display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s;
 }
 
+#senc-container.mouse-moving #fc-buttons button,
 #fc-buttons:hover button {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 .sbtn {
