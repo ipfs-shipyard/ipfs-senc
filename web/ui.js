@@ -44,15 +44,16 @@ class SencUI extends EventEmitter {
     this.onSetFileMode = this.onSetFileMode.bind(this)
     this.onDownloadAll = this.onDownloadAll.bind(this)
     this.onDownloadFile = this.onDownloadFile.bind(this)
+    this.onClickLink = this.onClickLink.bind(this)
 
     listenForMouseMoving(this.$el)
-    registerFormButtonHandlers(this.$el, this.onClickLoad, this.onDownloadAll)
+    registerFormButtonHandlers(this.$el, this.onClickLoad, this.onClickLink, this.onDownloadAll)
     registerFileButtonHandlers(this.$el, this.onSetFileMode, this.onDownloadFile)
   }
 
   setLoading(toggle) {
     if (!this._$loading) this._$loading = this.$el.find('#loading-spinner')
-    if (!this._$dlAllBtn) this._$dlAllBtn = this.$el.find('form button#input-download')
+    if (!this._$dlAllBtn) this._$dlAllBtn = this.$el.find('#form button#download-all')
 
     this._$loading.toggleClass('loading-spinner', toggle)
     if (toggle) {
@@ -103,23 +104,22 @@ class SencUI extends EventEmitter {
   }
 
   onDownloadAll(e) {
-    if (!this.yf) {
+    if (!this.yf || !this.yf.rawArchive) {
       console.error('clicked download before loading files')
       return
     }
 
-    var f = this.yf.selected
-    if (!f || !f.contents) {
-      console.error('clicked download with no file selected')
-      return false
-    }
-
-    var basename = f.name.split('/').pop()
-    filedl(f.contents, basename)
+    var f = this.yf.rawArchive
+    var hash = this.getFileParams().path.split('/').pop()
+    filedl(f, 'archive-'+ hash.substr(0, 10) +'.tar')
   }
 
   onClickLoad() {
     this.emit('load', this.getFileParams())
+  }
+
+  onClickLink() {
+    console.log('clicked link')
   }
 
   renderTree(stream) {
@@ -201,13 +201,15 @@ function listenForMouseMoving($el) {
   })
 }
 
-function registerFormButtonHandlers($el, onClickLoad, onDownloadAll) {
-  var $submit = $el.find('#form button#input-load')
-  var $download = $el.find('#form button#input-download')
-
+function registerFormButtonHandlers($el, onClickLoad, onClickLink, onDownloadAll) {
+  var $submit = $el.find('#form button#load')
   $submit.click(onClickLoad)
-  $submit.attr('disabled', false)
+  $submit.removeAttr('disabled')
 
+  var $link = $el.find('#form button#copy-link')
+  $link.click(onClickLink)
+
+  var $download = $el.find('#form button#download-all')
   $download.click(onDownloadAll)
   $download.attr('disabled', true) // disabled until it loads.
 }

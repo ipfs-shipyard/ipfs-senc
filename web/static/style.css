@@ -47,8 +47,8 @@ div {
 }
 
 #form #form-buttons {
-  flex: 0 1 auto;
-  width: 600px;
+  flex: 1 1 auto;
+  min-width: 600px;
   align-items: center;
 }
 
@@ -240,6 +240,13 @@ table#file-widget {
   color: #000;
   text-align: center;
   transition: all 0.2s;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .sbtn:hover,
@@ -248,7 +255,12 @@ table#file-widget {
   background-color: #13aec4;
 }
 
-.sbtn[disabled=true] {
+.sbtn:focus {
+  outline: none !important;
+  user-select: none;
+}
+
+.sbtn[disabled] {
   opacity: 0.3;
 }
 

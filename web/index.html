@@ -19,10 +19,13 @@
         <input id="input-path" type="text" placeholder="/ipfs/path..." /></div>
     </div>
     <div id="form-buttons">
-      <button id="input-load" class="sbtn tooltip-bottom"
+      <button id="load" class="sbtn tooltip-bottom"
         data-tooltip="Fetch the encypted archive, decrypt with the key, and display the files"
         disabled="disabled">Load <i class="icon ion-md-arrow-round-forward"></i></button>
-      <button id="input-download" class="sbtn tooltip-bottom"
+      <button id="copy-link" class="sbtn tooltip-bottom"
+        data-tooltip="Copy a global link to the viewer"
+        ><i class="icon ion-md-link"></i> Link</button>
+      <button id="download-all" class="sbtn tooltip-bottom"
         data-tooltip="Download the unencrypted archive"
         disabled="disabled"><i class="icon ion-md-download"></i> Download All</button>
       <span id="counter" data-tooltip="archive size" class="tooltip-bottom">0 B</span>
