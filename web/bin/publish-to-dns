@@ -1,0 +1,28 @@
+#!/bin/sh
+
+die() {
+  echo >&2 "error: $@"
+}
+
+require() {
+  which "$1" >/dev/null || die "please install $1"
+}
+
+require ipfs
+require dnslink-dnsimple
+
+version=$1
+[ "$version" != "" ] || version=$(tail -n1 versions | awk '{print $1}')
+
+domain=ipfs-senc.net
+name=_dnslink
+oldVersion=$(ipfs dns "$domain")
+
+echo "current dnslink: $oldVersion"
+echo "new dnslink:     $version"
+if [[ "$oldVersion" = "$version" ]]; then
+  echo "already at new version. nothing to do."
+  exit 0
+fi
+
+dnslink-dnsimple -t "$(cat .dnstoken)" -d "$domain" -r "$name" -l "$version"

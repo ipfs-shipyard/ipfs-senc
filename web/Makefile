@@ -1,5 +1,11 @@
-globalgway=https://ipfs.io
-localgway=http://localhost:8080
+deps: bindeps node_modules
+
+bindeps:
+	@which dnslink-dnsimple || go get github.com/ipfs/dnslink-dnsimple
+	@which ipfs || (echo "please install ipfs" && exit 1)
+
+node_modules:
+	npm install
 
 build: build/bundle.js index.html $(shell find static)
 	cp index.html build/.
@@ -16,11 +22,10 @@ serve: build
 	node_modules/.bin/live-server --port=7654 build
 
 watch:
-	node_modules/.bin/watch -p '/build|node_modules|test|.git/' 'make build' .
+	node_modules/.bin/watch -p '/build|node_modules|test|.git|bin/' 'make build' .
 
 publish-to-ipfs: build
-	@export hash=$(shell ipfs add -Q -r build) && \
-		export path="/ipfs/$$hash" && \
-		echo "published version: $$path" && \
-		echo "global: $(globalgway)$$path" && \
-		echo "local: $(localgway)$$path"
+	bin/publish-to-ipfs
+
+publish-to-dns: publish-to-ipfs
+	bin/publish-to-dns
