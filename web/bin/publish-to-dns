@@ -14,15 +14,27 @@ require dnslink-dnsimple
 version=$1
 [ "$version" != "" ] || version=$(tail -n1 versions | awk '{print $1}')
 
+ttl=60
 domain=ipfs-senc.net
 name=_dnslink
 oldVersion=$(ipfs dns "$domain")
 
 echo "current dnslink: $oldVersion"
-echo "new dnslink:     $version"
+echo "new dnslink: $version"
 if [[ "$oldVersion" = "$version" ]]; then
-  echo "already at new version. nothing to do."
-  exit 0
+  echo "dnslink already at this version"
+else
+  dnslink-dnsimple -t "$(cat .dnstoken)" -d "$domain" -r "$name" -l "$version" --ttl "$ttl"
+
+
 fi
 
-dnslink-dnsimple -t "$(cat .dnstoken)" -d "$domain" -r "$name" -l "$version"
+echo "waiting ${ttl}s for record to expire..."
+sleep "$ttl" # wait until last record expires (hopefully it was the same ttl)
+sleep 5 # five seconds more just in case.
+
+currVersion=$(ipfs dns "$domain")
+echo "updated dnslink: $currVersion"
+if [[ "$currVersion" != "$version" ]]; then
+  die "the record has not updated yet"
+fi
