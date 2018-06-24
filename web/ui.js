@@ -35,10 +35,11 @@ var template = `
 
 class SencUI extends EventEmitter {
 
-  constructor() {
+  constructor($el) {
     super()
 
-    var $el = this.$el = $(template)
+    if (!$el) $el = $(template)
+    this.$el = $el
 
     // rootEl is already populated with the right html.
     this.$submit = $el.find('#input-submit')

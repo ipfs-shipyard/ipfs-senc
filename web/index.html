@@ -6,5 +6,28 @@
 <link rel="stylesheet" type="text/css" href="static/ionicons/ionicons.min.css" />
 </head>
 <body>
+<div id="senc-container">
+
+  <div id="form">
+    <span>Key: <input id="input-key" type="text" placeholder="senc decryption key" /></span>
+    <span>Path: <input id="input-path" type="text" placeholder="/ipfs/path..." /></span>
+    <button id="input-submit" disabled="disabled">Load -></button>
+    <span id="counter">0 B</span>
+    <span id="links"><a href="https://github.com/jbenet/ipfs-senc">ipfs-senc</a></span>
+  </div>
+
+  <div id="browser">
+    <div id="fc-buttons">
+      <button id="fc-render" class="sbtn"><i class="icon ion-md-images"></i> Render</button>
+      <button id="fc-source" class="sbtn"><i class="icon ion-md-code"></i> Source</button>
+      <button id="fc-download" class="sbtn"><i class="icon ion-md-download"></i> Download</button>
+    </div>
+  </div>
+
+  <div id="loading-spinner" class="loading-spinner">
+  </div>
+
+  <img id="ipfs-logo" src="static/ipfs-logo.png" />
+</div>
 </body>
 </html>

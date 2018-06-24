@@ -8,10 +8,10 @@ const $ = require('jquery')
 var app = window.app = {}
 
 class SencApp extends EventEmitter {
-  constructor() {
+  constructor($el) {
     super()
 
-    this.ui = new SencUI()
+    this.ui = new SencUI($el)
     this.$el = this.ui.$el
 
     this.onLoad = this.onLoad.bind(this)
@@ -45,7 +45,8 @@ class SencApp extends EventEmitter {
 }
 
 function main() {
-  var app = new SencApp()
+  $senc = $('#senc-container')
+  var app = new SencApp($senc)
   app.on('params', (kp) => {
     urlHashSet(kp.key, kp.path)
   })
