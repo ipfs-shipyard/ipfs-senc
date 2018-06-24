@@ -3,24 +3,46 @@
 <script type="text/javascript" src="bundle.js"></script>
 <link rel="stylesheet" type="text/css" href="static/loader.css" />
 <link rel="stylesheet" type="text/css" href="static/style.css" />
+<link rel="stylesheet" type="text/css" href="static/tooltips.css" />
 <link rel="stylesheet" type="text/css" href="static/ionicons/ionicons.min.css" />
 </head>
 <body>
 <div id="senc-container">
 
   <div id="form">
-    <span>Key: <input id="input-key" type="text" placeholder="senc decryption key" /></span>
-    <span>Path: <input id="input-path" type="text" placeholder="/ipfs/path..." /></span>
-    <button id="input-submit" disabled="disabled">Load -></button>
-    <span id="counter">0 B</span>
-    <span id="links"><a href="https://github.com/jbenet/ipfs-senc">ipfs-senc</a></span>
+    <div id="form-inputs">
+      <div>
+        <div class="input-label">Decryption Key:</div>
+        <input id="input-key" type="text" placeholder="senc decryption key" /></div>
+      <div>
+        <div class="input-label">IPFS Path:</div>
+        <input id="input-path" type="text" placeholder="/ipfs/path..." /></div>
+    </div>
+    <div id="form-buttons">
+      <button id="input-load" class="sbtn tooltip-bottom"
+        data-tooltip="Fetch the encypted archive, decrypt with the key, and display the files"
+        disabled="disabled">Load <i class="icon ion-md-arrow-round-forward"></i></button>
+      <button id="input-download" class="sbtn tooltip-bottom"
+        data-tooltip="Download the unencrypted archive"
+        disabled="disabled"><i class="icon ion-md-download"></i> Download All</button>
+      <span id="counter" data-tooltip="archive size" class="tooltip-bottom">0 B</span>
+      <span id="links"><a href="https://github.com/jbenet/ipfs-senc"
+        data-tooltip="contribute on github" class="tooltip-bottom"
+        ><i class="icon ion-logo-github"></i></a></span>
+    </div>
   </div>
 
   <div id="browser">
     <div id="fc-buttons">
-      <button id="fc-render" class="sbtn"><i class="icon ion-md-images"></i> Render</button>
-      <button id="fc-source" class="sbtn"><i class="icon ion-md-code"></i> Source</button>
-      <button id="fc-download" class="sbtn"><i class="icon ion-md-download"></i> Download</button>
+      <button id="fc-render" class="sbtn tooltip-right"
+        data-tooltip="display browser rendering of the file"
+        ><i class="icon ion-md-images"></i> Render</button>
+      <button id="fc-source" class="sbtn tooltip-right"
+        data-tooltip="display raw source of the file"
+        ><i class="icon ion-md-code"></i> Source</button>
+      <button id="fc-download" class="sbtn tooltip-right"
+        data-tooltip="download file unencrypted"
+        ><i class="icon ion-md-download"></i> Download</button>
     </div>
   </div>
 

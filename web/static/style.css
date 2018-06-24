@@ -36,10 +36,50 @@ div {
   text-align: center;
 }
 
+#form {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+#form #form-inputs {
+  flex: 1 1 auto;
+}
+
+#form #form-buttons {
+  flex: 0 1 auto;
+  width: 600px;
+  align-items: center;
+}
+
+#form #form-inputs div {
+  display: inline-block;
+}
+
+#form #form-inputs .input-label {
+  width: 150px;
+  text-align: right;
+}
+
+#form #form-buttons > * {
+}
+
 #form #counter,
 #form #links {
   font-size: 12px;
   padding-left: 20px;
+}
+
+#form #links i {
+  font-size: 30px;
+  vertical-align: middle;
+}
+
+a i.icon,
+a:hover i.icon,
+a:visited i.icon,
+a:active i.icon {
+  color: #333;
 }
 
 #form input[type=text] {
@@ -178,7 +218,7 @@ table#file-widget {
   display: block;
   visibility: hidden;
   opacity: 0;
-  transition: all 0.2s;
+  transition: all 0.5s;
 }
 
 #senc-container.mouse-moving #fc-buttons button,
@@ -206,6 +246,10 @@ table#file-widget {
 .sbtn.selected {
   color: #fff;
   background-color: #13aec4;
+}
+
+.sbtn[disabled=true] {
+  opacity: 0.3;
 }
 
 pre {
