@@ -8,8 +8,11 @@ x.loadAndDecrypt = loadAndDecrypt
 x.normalizePath = normalizePath
 x.isIpfsPath = isIpfsPath
 
+const globalGateway = 'https://gateway.ipfs.io'
+const localGateway = 'http://localhost:8080'
 function gateway(userGateway) {
-  var g = userGateway || 'https://gateway.ipfs.io'
+  if (window.origin)
+  var g = userGateway || globalGateway
   // if we're hosted on ipfs, use same gateway
   if (isIpfsPath(window.location.pathname)) {
     g = window.origin // just use paths w/ same origin.
@@ -17,9 +20,27 @@ function gateway(userGateway) {
   return g
 }
 
-function catFn(userGateway) {
+function ipfsCat() {
+  var ipfs = window.ipfs
+  if (!ipfs || !ipfs.files.catReadableStream)
+    return null
+  console.log('using window.ipfs')
+  return path => ipfs.files.catReadableStream(path)
+}
+
+
+function gatewayCat(userGateway) {
   var gway = gateway(userGateway)
+  console.log('using gateway:', gway)
   return (path) => request(gway + path)
+}
+
+function catFn(opts) {
+  var opts = opts || {}
+  if (opts.forceGateway) {
+    return gatewayCat(opts.gateway)
+  }
+  return ipfsCat(opts) || gatewayCat(opts)
 }
 
 // option 2: js-ipfs-api
@@ -50,10 +71,10 @@ function normalizePath(path) {
   return path
 }
 
-function loadAndDecrypt(path, key, gateway) {
+function loadAndDecrypt(path, key, opts) {
   console.log('loading: ' + path)
 
-  var ipfsCat = catFn(gateway)
+  var ipfsCat = catFn(opts)
   var s = ipfsCat(path)
   s.on('error', console.error)
 
