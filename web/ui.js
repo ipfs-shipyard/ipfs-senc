@@ -6,43 +6,17 @@ const pretty = require('prettier-bytes')
 const through2 = require('through2')
 const EventEmitter = require('eventemitter3')
 const tar2yofs = require('./tar2yofs')
-
-var template = `
-<div id="senc-container">
-
-  <div id="form">
-    <span>Key: <input id="input-key" type="text" placeholder="senc decryption key" /></span>
-    <span>Path: <input id="input-path" type="text" placeholder="/ipfs/path..." /></span>
-    <button id="input-submit" disabled="disabled">Load -></button>
-    <span id="counter">0 B</span>
-    <span id="links"><a href="https://github.com/jbenet/ipfs-senc">ipfs-senc</a></span>
-  </div>
-
-  <div id="browser">
-    <div id="fc-buttons">
-      <button id="fc-render" class="sbtn"><i class="icon ion-md-images"></i> Render</button>
-      <button id="fc-source" class="sbtn"><i class="icon ion-md-code"></i> Source</button>
-      <button id="fc-download" class="sbtn"><i class="icon ion-md-download"></i> Download</button>
-    </div>
-  </div>
-
-  <div id="loading-spinner" class="loading-spinner">
-  </div>
-
-  <img id="ipfs-logo" src="static/ipfs-logo.png" />
-</div>
-`
+const concat = require('concat-stream')
+const fromBuffer = require('./from-buffer')
 
 class SencUI extends EventEmitter {
 
   constructor($el) {
     super()
 
-    if (!$el) $el = $(template)
     this.$el = $el
 
     // rootEl is already populated with the right html.
-    this.$submit = $el.find('#input-submit')
     this.$path = $el.find('#input-path')
     this.$key = $el.find('#input-key')
     this.$browser = $el.find('#browser')
@@ -68,17 +42,24 @@ class SencUI extends EventEmitter {
     this.onClickLoad = this.onClickLoad.bind(this)
     this.onSelectFile = this.onSelectFile.bind(this)
     this.onSetFileMode = this.onSetFileMode.bind(this)
-    this.onDownload = this.onDownload.bind(this)
-
-    this.$submit.click(this.onClickLoad)
-    this.$submit.attr('disabled', false)
+    this.onDownloadAll = this.onDownloadAll.bind(this)
+    this.onDownloadFile = this.onDownloadFile.bind(this)
 
     listenForMouseMoving(this.$el)
-    registerFileButtonHandlers(this.$el, this.onSetFileMode, this.onDownload)
+    registerFormButtonHandlers(this.$el, this.onClickLoad, this.onDownloadAll)
+    registerFileButtonHandlers(this.$el, this.onSetFileMode, this.onDownloadFile)
   }
 
   setLoading(toggle) {
-    this.$loading.toggleClass('loading-spinner', toggle)
+    if (!this._$loading) this._$loading = this.$el.find('#loading-spinner')
+    if (!this._$dlAllBtn) this._$dlAllBtn = this.$el.find('form button#input-download')
+
+    this._$loading.toggleClass('loading-spinner', toggle)
+    if (toggle) {
+      this._$dlAllBtn.attr('disabled', true)
+    } else {
+      this._$dlAllBtn.removeAttr('disabled')
+    }
   }
 
   userSelectEl($el, keepLast) {
@@ -105,7 +86,23 @@ class SencUI extends EventEmitter {
     }
   }
 
-  onDownload(e) {
+  onDownloadFile(e) {
+    if (!this.yf) {
+      console.error('clicked download before loading files')
+      return
+    }
+
+    var f = this.yf.selected
+    if (!f || !f.contents) {
+      console.error('clicked download with no file selected')
+      return false
+    }
+
+    var basename = f.name.split('/').pop()
+    filedl(f.contents, basename)
+  }
+
+  onDownloadAll(e) {
     if (!this.yf) {
       console.error('clicked download before loading files')
       return
@@ -133,16 +130,32 @@ class SencUI extends EventEmitter {
     this.yf = yofs('/', [], this.onSelectFile)
     this.$browser.append(this.yf.widget)
 
-    var c = tar2yofs((err, files) => {
-      if (err) throw err
-      var entries = Object.values(files)
-      this.yf.update(this.yf.render('/', entries, this.onSelectFile))
-      this.setLoading(false)
-      this.autoSelectFirstFile()
-    })
+    // start the pipeline
+    stream
+      .pipe(counterStream(this.$counter))
+      .pipe(concat((tarball) => {
+        // keep the whole buffer around, to download it quickly.
+        // todo: change this when we remove whole file buffering
+        // this is definitely clunky (stream->concat->stream)
 
-    stream.pipe(counterStream(this.$counter)).pipe(c)
-    // stream.pipe(counterStream()) .on('data', (d) => { console.log(d.length) })
+        // set it on this.yf so it goes away at exactly the same time.
+        // this is here mostly to support downloading the whole archive
+        // but this buffer is also the source for everything.
+        this.yf.rawArchive = tarball
+
+        var s = fromBuffer.createReadStream(this.yf.rawArchive)
+
+        // ok, and now feed it into the tarball reader
+        s.pipe(tar2yofs((err, files) => {
+          if (err) throw err
+
+          // ok we're ready to render everything
+          var entries = Object.values(files)
+          this.yf.update(this.yf.render('/', entries, this.onSelectFile))
+          this.setLoading(false)
+          this.autoSelectFirstFile()
+        })) // <-- this is what renders the file browser
+      }))
   }
 
   autoSelectFirstFile() {
@@ -188,7 +201,18 @@ function listenForMouseMoving($el) {
   })
 }
 
-function registerFileButtonHandlers($el, onSetFileMode, onDownload) {
+function registerFormButtonHandlers($el, onClickLoad, onDownloadAll) {
+  var $submit = $el.find('#form button#input-load')
+  var $download = $el.find('#form button#input-download')
+
+  $submit.click(onClickLoad)
+  $submit.attr('disabled', false)
+
+  $download.click(onDownloadAll)
+  $download.attr('disabled', true) // disabled until it loads.
+}
+
+function registerFileButtonHandlers($el, onSetFileMode, onDownloadFile) {
   var $rdrB = $el.find('button#fc-render')
   var $srcB = $el.find('button#fc-source')
   var $dlB = $el.find('button#fc-download')
@@ -207,7 +231,7 @@ function registerFileButtonHandlers($el, onSetFileMode, onDownload) {
     onSetFileMode(e, 'src')
   })
 
-  $dlB.click(onDownload)
+  $dlB.click(onDownloadFile)
 }
 
 module.exports = SencUI

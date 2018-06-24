@@ -1,7 +1,7 @@
 const concat = require('concat-stream')
 const gunzip = require('gunzip-maybe')
 const tar = require('tar-stream')
-const from = require('from2')
+const fromBuffer = require('./from-buffer')
 
 module.exports = extract
 
@@ -25,7 +25,7 @@ function extract(cb) {
 function file(hdr, contents, cb) {
   var f = hdr
   f.modified = f.mtime
-  f.createReadStream = (opts) => createReadStream(f.contents, opts)
+  f.createReadStream = (opts) => fromBuffer.createReadStream(f.contents, opts)
 
   // buffer the data in this file object. expensive!
   contents.pipe(concat(data => {
@@ -33,23 +33,4 @@ function file(hdr, contents, cb) {
     cb(f)
   }))
   return f
-}
-
-function createReadStream(buf, opts) {
-  opts = opts || {}
-  var start = opts.start || 0
-  var end = opts.end || buf.length
-  buf = buf.slice(start, end)
-  return fromBuffer(buf)
-}
-
-function fromBuffer(buffer) {
-  var idx = 0
-  return from(function read (size, next) {
-    if (idx >= buffer.length) return this.push(null)
-
-    var start = idx
-    idx += size
-    next(null, buffer.slice(start, idx))
-  })
 }
