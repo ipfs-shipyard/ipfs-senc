@@ -5,9 +5,15 @@ const filedl = require('js-file-download')
 const pretty = require('prettier-bytes')
 const through2 = require('through2')
 const EventEmitter = require('eventemitter3')
+const clipboardCopy = require('clipboard-copy')
+
 const tar2yofs = require('./tar2yofs')
 const concat = require('concat-stream')
 const fromBuffer = require('./from-buffer')
+const anchor = require('./anchor')
+
+const sencurl = 'https://ipfs.io/ipns/ipfs-senc.net'
+
 
 class SencUI extends EventEmitter {
 
@@ -114,12 +120,14 @@ class SencUI extends EventEmitter {
     filedl(f, 'archive-'+ hash.substr(0, 10) +'.tar')
   }
 
-  onClickLoad() {
+  onClickLoad(e) {
     this.emit('load', this.getFileParams())
   }
 
-  onClickLink() {
-    console.log('clicked link')
+  onClickLink(e) {
+    var link = sencurl + '/' + anchor.slugMake(this.getFileParams())
+    clipboardCopy(link)
+    tempSetTooltip(e.target, "copied!")
   }
 
   renderTree(stream) {
@@ -234,6 +242,15 @@ function registerFileButtonHandlers($el, onSetFileMode, onDownloadFile) {
   })
 
   $dlB.click(onDownloadFile)
+}
+
+function tempSetTooltip(el, text, duration) {
+  duration = duration || 1000
+
+  $el = $(el)
+  var old = $el.attr('data-tooltip')
+  $el.attr('data-tooltip', text)
+  setTimeout(() => $el.attr('data-tooltip', old), 3000)
 }
 
 module.exports = SencUI

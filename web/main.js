@@ -1,7 +1,8 @@
-const SencData = require('./data')
-var SencUI = require('./ui')
-const EventEmitter = require('eventemitter3')
 const $ = require('jquery')
+const EventEmitter = require('eventemitter3')
+const SencData = require('./data')
+const SencUI = require('./ui')
+const anchor = require('./anchor')
 // const audit = require('./auditlog')
 
 // app will have all the variables.
@@ -71,34 +72,17 @@ function main() {
   var opts = {'$el': $('#senc-container')}
   opts.gateway = queryParam('gateway') || null
   opts.forceGateway = queryParam('forceGateway')
-  console.log(opts)
 
   $senc = $('#senc-container')
   var app = new SencApp(opts)
   app.on('params', (kp) => {
-    urlHashSet(kp.key, kp.path)
+    anchor.urlHashSet(kp.key, kp.path)
   })
 
   $('body').append(app.$el)
 
-  var kp = urlHashLoad()
+  var kp = anchor.urlHashLoad()
   app.setFileParams(kp.key, kp.path)
-}
-
-
-function urlHashLoad() {
-  var h = window.location.hash.substr(1)
-  if (!h) return
-
-  vals = h.split(':')
-  return {
-    key: vals[0],
-    path: vals[1],
-  }
-}
-
-function urlHashSet(key, path) {
-  window.location.hash = key +':'+ path
 }
 
 function queryParam(name, url) {

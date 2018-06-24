@@ -264,6 +264,11 @@ table#file-widget {
   opacity: 0.3;
 }
 
+.sbtn:active {
+  color: #000;
+  background-color: #fff;
+}
+
 pre {
   font-family: Monaco, monospace;
 }
