@@ -19,6 +19,9 @@ domain=ipfs-senc.net
 name=_dnslink
 oldVersion=$(ipfs dns "$domain")
 
+# if we have ipfs-push, use it
+which ipfs-push >/dev/null && ipfs-push "$version"
+
 echo "current dnslink: $oldVersion"
 echo "new dnslink: $version"
 if [[ "$oldVersion" = "$version" ]]; then
