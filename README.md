@@ -30,7 +30,7 @@ go get github.com/jbenet/ipfs-senc/ipfs-senc
 ### How to encrypt & share
 
 ```
-# encrypt with a known key. (>256bits please)
+# encrypt with a known key. (256bits please)
 ipfs-senc share --key <secret-key> <path-to-file-or-directory>
 
 # encrypt with a randomly generated key. will be printed out.
