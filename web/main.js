@@ -30,6 +30,7 @@ class SencApp extends EventEmitter {
     return {
       gateway: this.opts.gateway,
       forceGateway: this.opts.forceGateway,
+      forceWindowIpfs: this.opts.forceWindowIpfs,
     }
   }
 
@@ -72,6 +73,7 @@ function main() {
   var opts = {'$el': $('#senc-container')}
   opts.gateway = queryParam('gateway') || null
   opts.forceGateway = queryParam('forceGateway')
+  opts.forceWindowIpfs = queryParam('forceWindowIpfs')
 
   $senc = $('#senc-container')
   var app = new SencApp(opts)

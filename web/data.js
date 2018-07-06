@@ -38,9 +38,17 @@ function gatewayCat(userGateway) {
 function catFn(opts) {
   var opts = opts || {}
   if (opts.forceGateway) {
+    console.log("forcing gateway")
     return gatewayCat(opts.gateway)
   }
-  return ipfsCat(opts) || gatewayCat(opts)
+  if (opts.forceWindowIpfs) {
+    console.log("forcing window.ipfs")
+    return ipfsCat(opts)
+  }
+
+  // window.ipfs keeps being buggy or broken. disable for now:
+  // return ipfsCat(opts) || gatewayCat(opts.gateway)
+  return gatewayCat(opts.gateway)
 }
 
 // option 2: js-ipfs-api
