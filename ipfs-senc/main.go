@@ -181,8 +181,8 @@ func cmdShare(args []string) error {
 
   fmt.Println("Shared as: ", l)
   fmt.Println("Key: ", keyStr)
-  fmt.Println("Ciphertext on local gateway: ", gwayGlobal, l)
-  fmt.Println("Ciphertext on global gateway: ", gwayLocal, l)
+  fmt.Println("Ciphertext on global gateway: ", gwayGlobal, l)
+  fmt.Println("Ciphertext on local gateway: ", gwayLocal, l)
   fmt.Println("")
   fmt.Println("Get, Decrypt, and Unbundle with:")
   fmt.Println("    ipfs-senc --key", keyStr, "download", l, "dstPath")
