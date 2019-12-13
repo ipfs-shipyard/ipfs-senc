@@ -31,7 +31,7 @@ go get github.com/jbenet/ipfs-senc/ipfs-senc
 
 ```
 # encrypt with a known key. (>256bits please)
-ipfs-senc share --key <secret-key> <path-to-file-or-directory>
+ipfs-senc --key <secret-key> share  <path-to-file-or-directory>
 
 # encrypt with a randomly generated key. will be printed out.
 ipfs-senc share <path-to-file-or-directory>
@@ -46,7 +46,7 @@ Leave your IPFS node running, or pin this somewhere. consider [ipfs-cluster](htt
 ipfs-senc download <ipfs-link> <local-source-dir-or-file>
 
 # decrypt with given key.
-ipfs-senc download --key <secret-key> <ipfs-link> [<local-destination-dir>]
+ipfs-senc --key <secret-key> download  <ipfs-link> [<local-destination-dir>]
 ```
 
 Will use your local ipfs node, or the ipfs-gateway if no local node is available.
