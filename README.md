@@ -51,7 +51,7 @@ Will use your local ipfs node, or the ipfs-gateway if no local node is available
 
 ## Shell Script
 
-If you have [the `senc` tool](https://github.com/jbenet/go-simple-encrypt/senc), then you can also use the script provided in [ipfs-senc/ipfs-senc.sh](ipfs-senc/ipfs-senc.sh)
+If you have [the `senc` tool](https://github.com/jbenet/go-simple-encrypt/tree/master/senc), then you can also use the script provided in [ipfs-senc/ipfs-senc.sh](ipfs-senc/ipfs-senc.sh)
 
 ## On the browser
 
