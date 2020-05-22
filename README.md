@@ -4,8 +4,6 @@
 
 Currently, IPFS does not have an inbuilt content encryption system. Many solutions exist on top. I wanted something easy. This builds on [senc](https://github.com/jbenet/go-simple-encrypt).
 
-> WARNING: i cannot maintain small pieces of software anymore. if you want to use this, pull it into ipfs-shipyard (i'm happy to transfer it) and maintain it there. I just put it under @jbenet for simplicity.
-
 ## View examples on the web
 
 - Full Demo: https://ipfs.io/ipns/ipfs-senc.net/#zGekfyfuYnk9FPsMnJLPQeJ9s9M3AcE4pdNq2ujrKu5WR:/ipfs/QmQgMRb5FZBtX5KBDWGRcc5Vkq5FMvndpEh6YzhMzjCZVo
@@ -24,7 +22,7 @@ This tool is command-line based.
 Using go get:
 
 ```
-go get github.com/jbenet/ipfs-senc/ipfs-senc
+go get github.com/ipfs-shipyard/ipfs-senc/ipfs-senc
 ```
 
 ### How to encrypt & share
