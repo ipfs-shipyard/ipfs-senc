@@ -2,7 +2,7 @@
 
 > WARNING: NOT AUDITED! USE AT OWN RISK. DONT USE FOR ANYTHING SERIOUS.
 
-## First, see [ipfs-senc](https://github.com/jbenet/ipfs-senc)
+## First, see [ipfs-senc](https://github.com/ipfs-shipyard/ipfs-senc)
 
 This is a tool to view `ipfs-senc` shared files on the web.
 
